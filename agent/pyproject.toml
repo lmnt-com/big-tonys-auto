@@ -1,0 +1,11 @@
+[project]
+name = "big-tony-agent"
+version = "0.1.0"
+description = "LiveKit Agent for Big Tony"
+requires-python = ">=3.9"
+dependencies = [
+  "livekit-agents[openai,deepgram,silero,turn-detector]~=1.0",
+  "livekit-plugins-noise-cancellation~=0.2",
+  "python-dotenv~=1.0",
+  "livekit-plugins-lmnt~=1.0",
+]
