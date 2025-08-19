@@ -1,6 +1,6 @@
 # LMNT Real-Time Conversational AI Demo
 
-This is the source code for the [Big Tony's Auto Emporium](https://lmnt-car-dealer.vercel.app/) project with speech provided by [LMNT](https://lmnt.com/). It demonstrates how to build a conversational voice AI agent using LiveKit Agents, LMNT, and Vapi.
+This is the source code for the [Big Tony's Auto Emporium](https://lmnt-car-dealer-demo.vercel.app/) project with speech provided by [LMNT](https://lmnt.com/). It demonstrates how to build a conversational voice AI agent using LiveKit Agents, LMNT, and Vapi.
 
 ## Quick Start
 
