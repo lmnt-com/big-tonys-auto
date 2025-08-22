@@ -15,20 +15,25 @@ import {
 } from "@/components/ui/card";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import Link from "next/link";
+import { WebCallButton } from "@/components/web-call-button";
+import { getAppConfig } from "@/lib/utils";
+import { headers } from "next/headers";
+import { CallContainer } from "@/components/call-container";
 
-export default function CarDealershipPage() {
+export default async function CarDealershipPage() {
   const phoneNumber = process.env.VAPI_PHONE_NUMBER || "+1 (XXX) XXX-XXXX";
+  const hdrs = await headers();
+  const appConfig = await getAppConfig(hdrs);
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-red-900 to-slate-800 text-white py-20">
+      <section className="bg-gradient-to-r from-red-900 to-slate-800 text-white py-14">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-5xl font-bold mb-6">
-            🚗 DEALS SO GOOD, THEY&apos;RE PRACTICALLY STEALING! 🚗
+            DEALS SO GOOD, <br /> THEY&apos;RE PRACTICALLY STEALING! 🚗
           </h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
             Talk to Big Tony himself! He&apos;s got answers, he&apos;s got
@@ -36,8 +41,8 @@ export default function CarDealershipPage() {
             might actually put your name on it.)
           </p>
 
-          {/* Main CTA with Phone Number */}
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl mx-auto border-4 border-yellow-400">
+          {/* Main CTA with Phone Number and Web Call */}
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl mx-auto border-4 border-yellow-400">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Headphones className="h-8 w-8 text-red-600" />
               <h2 className="text-2xl font-bold text-gray-800">
@@ -45,32 +50,26 @@ export default function CarDealershipPage() {
               </h2>
             </div>
             <p className="text-gray-600 mb-6">
-              He&apos;s sitting by the phone, waiting for YOUR call! Don&apos;t
-              let him down - he&apos;s already picked out 3 cars he thinks
-              you&apos;ll love!
+              He&apos;s sitting by the phone, waiting for YOUR call! Don&apos;t let him down.
             </p>
 
-            <div className="flex justify-center mb-6 gap-4 flex-wrap">
-              <a
-                href={`tel:${phoneNumber}`}
-                className="bg-red-600 hover:bg-red-700 text-white text-2xl font-bold py-4 px-8 rounded-xl flex items-center gap-3 transition-transform shadow-lg"
-              >
-                <Phone className="h-8 w-8" />
-                {phoneNumber}
-              </a>
-              <Link
-                href="/call"
-                className="bg-blue-600 hover:bg-blue-700 text-white text-2xl font-bold py-4 px-8 rounded-xl flex items-center gap-3 transition-transform shadow-lg"
-                aria-label="Start a web call with Big Tony"
-              >
-                <Headphones className="h-8 w-8" />
-                Web call
-              </Link>
-            </div>
+            <CallContainer appConfig={appConfig} phoneNumber={phoneNumber} />
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 text-center mt-6">
               📞 Tony&apos;s waiting! • No appointment needed • He WILL make you
               a deal
+            </p>
+            <p className="text-sm text-gray-500 text-center mt-6">
+              Not working? Let us know at{" "}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="mailto:support@lmnt.com"
+                className="underline"
+              >
+                support@lmnt.com
+              </a>
+              .
             </p>
           </div>
         </div>
@@ -193,7 +192,7 @@ export default function CarDealershipPage() {
                   He&apos;s pacing around the lot, checking his phone every 30
                   seconds. Don&apos;t leave him hanging - call now!
                 </p>
-                <div className="flex items-center justify-center gap-3 flex-wrap">
+                <div className="flex flex-col items-center justify-center gap-4">
                   <a
                     href={`tel:${phoneNumber}`}
                     className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
@@ -201,13 +200,7 @@ export default function CarDealershipPage() {
                     <Phone className="h-5 w-5" />
                     Call Tony: {phoneNumber}
                   </a>
-                  <Link
-                    href="/call"
-                    className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
-                  >
-                    <Headphones className="h-5 w-5" />
-                    Web Call
-                  </Link>
+                  <WebCallButton variant="default" />
                 </div>
               </div>
             </div>
@@ -215,15 +208,15 @@ export default function CarDealershipPage() {
         </div>
       </section>
 
-      {/* Floating Call Button (Mobile) */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50">
+      {/* Floating Call Buttons (Mobile) */}
+      <div className="md:hidden fixed bottom-6 right-6 z-50 flex flex-col gap-3">
         <a
           href={`tel:${phoneNumber}`}
-          className="flex items-center gap-2 bg-red-600 text-white p-4 rounded-full shadow-lg animate-bounce"
+          className="flex items-center gap-2 bg-red-600 text-white p-4 rounded-full shadow-lg"
           aria-label="Call Big Tony"
         >
           <Phone className="h-6 w-6" />
-          <span className="font-bold">Tony&apos;s Waiting!</span>
+          <span className="font-bold">Call Tony!</span>
         </a>
       </div>
 
@@ -306,7 +299,7 @@ export default function CarDealershipPage() {
             He&apos;s been staring at the phone for 3 minutes straight.
             That&apos;s a record!
           </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          <div className="flex flex-col items-center justify-center gap-4">
             <a
               href={`tel:${phoneNumber}`}
               className="inline-flex items-center gap-3 bg-white text-red-700 px-8 py-4 rounded-xl font-bold text-2xl hover:bg-gray-100 transition-colors shadow-lg"
@@ -314,13 +307,7 @@ export default function CarDealershipPage() {
               <Phone className="h-6 w-6" />
               {phoneNumber}
             </a>
-            <Link
-              href="/call"
-              className="inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-2xl hover:bg-blue-700 transition-colors shadow-lg"
-            >
-              <Headphones className="h-6 w-6" />
-              Web Call
-            </Link>
+            <WebCallButton variant="large" text="Web Call" />
           </div>
           <p className="text-sm mt-4 opacity-90">
             *Tony&apos;s happiness not guaranteed, but highly likely

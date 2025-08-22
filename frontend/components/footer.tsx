@@ -1,4 +1,5 @@
 import { Car } from "lucide-react";
+import { WebCallButton } from "./web-call-button";
 
 export function Footer() {
   const phoneNumber = "+1 (740) 224 2691";
@@ -30,6 +31,7 @@ export function Footer() {
               >
                 📞 {phoneNumber}
               </a>
+              <WebCallButton variant="footer" text="Web Call" />
               <p>✉️ tony@bigdeals.com</p>
             </div>
           </div>
