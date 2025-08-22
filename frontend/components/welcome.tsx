@@ -16,7 +16,7 @@ export const Welcome = ({
     <div
       ref={ref}
       inert={disabled}
-      className="absolute inset-0 mx-auto flex min-h-[500px] flex-col items-center justify-center text-center"
+      className="flex flex-col items-center justify-center text-center"
     >
       <svg
         width="64"
@@ -32,29 +32,17 @@ export const Welcome = ({
         />
       </svg>
 
-      <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
-        Chat live with Big Tony
+      <p className="text-fg1 text-sm leading-5 font-medium mb-4">
+        Chat with Tony in your browser
       </p>
       <Button
         variant="primary"
-        size="lg"
+        size="default"
         onClick={onStartCall}
-        className="mt-6 w-64 font-mono"
+        className="w-48 font-mono"
       >
         {startButtonText}
       </Button>
-      <p className="text-fg1 absolute bottom-5 left-1/2 w-full max-w-prose -translate-x-1/2 pt-1 text-xs leading-5 font-normal text-pretty md:text-sm">
-        Not working? Let us know at{" "}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="mailto:support@lmnt.com"
-          className="underline"
-        >
-          support@lmnt.com
-        </a>
-        .
-      </p>
     </div>
   );
 };

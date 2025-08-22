@@ -20,9 +20,10 @@ const MotionSessionView = motion.create(SessionView);
 
 interface AppProps {
   appConfig: AppConfig;
+  onSessionStarted?: (started: boolean) => void;
 }
 
-export function App({ appConfig }: AppProps) {
+export function App({ appConfig, onSessionStarted }: AppProps) {
   const room = useMemo(() => new Room(), []);
   const [sessionStarted, setSessionStarted] = useState(false);
   const { refreshConnectionDetails, existingOrRefreshConnectionDetails } =
@@ -31,6 +32,7 @@ export function App({ appConfig }: AppProps) {
   useEffect(() => {
     const onDisconnected = () => {
       setSessionStarted(false);
+      onSessionStarted?.(false);
       refreshConnectionDetails();
     };
     const onMediaDevicesError = (error: Error) => {
@@ -90,41 +92,76 @@ export function App({ appConfig }: AppProps) {
   const { startButtonText } = appConfig;
 
   return (
-    <div className="relative min-h-[500px] w-full">
-      <MotionWelcome
-        key="welcome"
-        startButtonText={startButtonText}
-        onStartCall={() => setSessionStarted(true)}
-        disabled={sessionStarted}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: sessionStarted ? 0 : 1 }}
-        transition={{
-          duration: 0.5,
-          ease: "linear",
-          delay: sessionStarted ? 0 : 0.5,
+    <motion.div 
+      className="relative"
+      initial={{ 
+        width: "320px",
+        height: "200px",
+        margin: "0 auto"
+      }}
+      animate={{ 
+        width: sessionStarted ? "100%" : "320px",
+        height: sessionStarted ? "500px" : "200px",
+        margin: sessionStarted ? "0" : "0 auto"
+      }}
+      transition={{
+        duration: 0.8,
+        ease: "easeInOut"
+      }}
+    >
+      <motion.div
+        className="relative w-full h-full flex items-center justify-center"
+        initial={{ 
+          backgroundColor: "transparent",
+          padding: "20px"
         }}
-      />
-
-      <RoomContext.Provider value={room}>
-        <RoomAudioRenderer />
-        <StartAudio label="Start Audio" />
-        {/* --- */}
-        <MotionSessionView
-          key="session-view"
-          appConfig={appConfig}
-          disabled={!sessionStarted}
-          sessionStarted={sessionStarted}
+        animate={{ 
+          backgroundColor: sessionStarted ? "rgb(249 250 251)" : "transparent",
+          padding: sessionStarted ? "24px" : "20px"
+        }}
+        transition={{
+          duration: 0.8,
+          ease: "easeInOut"
+        }}
+      >
+        <MotionWelcome
+          key="welcome"
+          startButtonText={startButtonText}
+          onStartCall={() => {
+            setSessionStarted(true);
+            onSessionStarted?.(true);
+          }}
+          disabled={sessionStarted}
           initial={{ opacity: 0 }}
-          animate={{ opacity: sessionStarted ? 1 : 0 }}
+          animate={{ opacity: sessionStarted ? 0 : 1 }}
           transition={{
             duration: 0.5,
             ease: "linear",
-            delay: sessionStarted ? 0.5 : 0,
+            delay: sessionStarted ? 0 : 0.5,
           }}
         />
-      </RoomContext.Provider>
 
-      <Toaster />
-    </div>
+        <RoomContext.Provider value={room}>
+          <RoomAudioRenderer />
+          <StartAudio label="" />
+          {/* --- */}
+          <MotionSessionView
+            key="session-view"
+            appConfig={appConfig}
+            disabled={!sessionStarted}
+            sessionStarted={sessionStarted}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: sessionStarted ? 1 : 0 }}
+            transition={{
+              duration: 0.5,
+              ease: "linear",
+              delay: sessionStarted ? 0.5 : 0,
+            }}
+          />
+        </RoomContext.Provider>
+
+        <Toaster />
+      </motion.div>
+    </motion.div>
   );
 }
